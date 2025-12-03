@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Panel de Control - Jefe de Ventas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <div class="container">
+    <div class="form-card">
+      <!-- Botón de cerrar sesión -->
+      <button type="button" class="btn-cerrar-sesion" onclick="cerrarSesion()">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+
+      <div class="titulo-contenedor">
+        <h2 class="titulo-panel">Panel de Control - Jefe de Ventas</h2>
+      </div>
+
+      <div class="control-dia">
+        <h3><i class="fas fa-calendar-day"></i> Control de Día</h3>
+        <p>Estado actual: <span id="estadoDia">ABIERTO</span></p>
+        <button id="cerrarDia">Cerrar Día</button>
+        <button id="abrirDia" style="display:none;">Abrir Día</button>
+      </div>
+
+      <!-- ===== GESTIÓN DE PRODUCTOS/SKUs ===== -->
+      <div class="gestion-productos">
+        <h3><i class="fas fa-box"></i> Gestión de Productos (SKUs)</h3>
+
+        <button id="toggleFormProducto" class="btn-toggle">Agregar Nuevo Producto</button>
+
+        <div id="formProductoContenedor" style="display: none;">
+          <form id="productoForm">
+            <div class="form-row">
+              <div class="input-group">
+                <label for="prodCodigo"><i class="fas fa-barcode"></i> Código SKU</label>
+                <input type="text" id="prodCodigo" required>
+              </div>
+              <div class="input-group">
+                <label for="prodNombre"><i class="fas fa-tag"></i> Nombre del Producto</label>
+                <input type="text" id="prodNombre" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="input-group">
+                <label for="prodPrecio"><i class="fas fa-dollar-sign"></i> Precio Unitario</label>
+                <input type="number" step="10" min="0" id="prodPrecio" required>
+              </div>
+              <div class="input-group">
+                <label for="prodDescripcion"><i class="fas fa-info-circle"></i> Descripción (opcional)</label>
+                <input type="text" id="prodDescripcion">
+              </div>
+            </div>
+
+            <div class="modal-buttons">
+              <button type="submit" class="btn-confirm">Guardar Producto</button>
+              <button type="button" class="btn-cancel" onclick="cancelarFormProducto()">Cancelar</button>
+            </div>
+          </form>
+        </div>
+
+        <h4>Productos Registrados</h4>
+        <table class="reporte-table">
+          <thead>
+            <tr>
+              <th>Código SKU</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Descripción</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="lista-productos">
+            <tr><td colspan="5">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reportes">
+        <h3><i class="fas fa-chart-bar"></i> Reportes Diarios</h3>
+        
+        <table class="reporte-table">
+          <thead>
+            <tr>
+              <th>Tipo de Documento</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="resumen-documentos">
+            <tr><td colspan="2">Cargando...</td></tr>
+          </tbody>
+        </table>
+
+        <h4>Desglose por Vendedor</h4>
+        <table class="reporte-table">
+          <thead>
+            <tr>
+              <th>Vendedor</th>
+              <th>Total Ventas</th>
+              <th>Boletas</th>
+              <th>Facturas</th>
+            </tr>
+          </thead>
+          <tbody id="desglose-vendedores">
+            <tr><td colspan="4">Cargando...</td></tr>
+          </tbody>
+        </table>
+
+        <h4>Totales Generales</h4>
+        <div class="totales" id="totales-generales">
+          Cargando...
+        </div>
+
+        <!-- ✅ BOTÓN MOVIDO AQUÍ: justo después de "Totales Generales" -->
+        <button id="toggleDetalle" class="btn-toggle">Mostrar Detalle de Ventas</button>
+
+        <!-- ✅ CONTENEDOR DEL DETALLE: justo después del botón -->
+        <div id="detalleVentasContenedor" style="display: none;">
+          <h4>Detalle de Ventas</h4>
+          <table class="reporte-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Precio Unit.</th>
+                <th>Subtotal</th>
+                <th>IVA</th>
+                <th>Total</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <tbody id="detalle-ventas">
+              <tr><td colspan="9">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Edición de Producto -->
+  <div id="modalEditarProducto" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h3><i class="fas fa-edit"></i> Editar Producto</h3>
+      <form id="formEditarProducto">
+        <input type="hidden" id="editCodigoOriginal">
+
+        <div class="input-group">
+          <label for="editCodigo"><i class="fas fa-barcode"></i> Código SKU</label>
+          <input type="text" id="editCodigo" required readonly style="background-color: #f0f0f0;">
+          <small style="color: #666;">El código no se puede modificar</small>
+        </div>
+
+        <div class="input-group">
+          <label for="editNombre"><i class="fas fa-tag"></i> Nombre del Producto</label>
+          <input type="text" id="editNombre" required>
+        </div>
+
+        <div class="input-group">
+          <label for="editPrecio"><i class="fas fa-dollar-sign"></i> Precio Unitario</label>
+          <input type="number" step="10" min="0" id="editPrecio" required>
+        </div>
+
+        <div class="input-group">
+          <label for="editDescripcion"><i class="fas fa-info-circle"></i> Descripción (opcional)</label>
+          <input type="text" id="editDescripcion">
+        </div>
+
+        <div class="modal-buttons">
+          <button type="submit" class="btn-confirm">Guardar Cambios</button>
+          <button type="button" class="btn-cancel" onclick="cerrarModalEdicion()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <!-- Archivos del sistema -->
+  <script src="config.js"></script>
+  <script src="firebase.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>

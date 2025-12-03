@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Iniciar Sesión</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-form">
+      <div class="login-header">
+        <i class="fas fa-user-circle fa-3x"></i>
+        <h2>Iniciar Sesión</h2>
+      </div>
+      <form id="loginForm">
+        <div class="input-group">
+          <label for="usuario"><i class="fas fa-user"></i> Usuario</label>
+          <input type="text" id="usuario" placeholder="Ingresa tu usuario" required>
+        </div>
+
+        <div class="input-group">
+          <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
+          <input type="password" id="password" placeholder="Ingresa tu contraseña" required>
+        </div>
+
+        <button type="submit">
+          <i class="fas fa-sign-in-alt"></i> Entrar
+        </button>
+      </form>
+      <div id="mensaje-error" class="error"></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <!-- Archivos del sistema -->
+  <script src="config.js"></script>
+  <script src="firebase.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>

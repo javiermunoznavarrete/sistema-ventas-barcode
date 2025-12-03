@@ -1,0 +1,921 @@
+/* ===== ESTILO GLOBAL PARA TODAS LAS PÁGINAS ===== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('img1.jfif') no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Superposición oscura para mejorar la legibilidad */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: -1;
+}
+
+/* ===== ESTILOS DEL LOGIN (index.html) ===== */
+.login-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 400px;
+  padding: 0 20px;
+  z-index: 1;
+}
+
+.login-form {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.login-header {
+  margin-bottom: 25px;
+}
+
+.login-header i {
+  color: #2575fc;
+}
+
+.login-header h2 {
+  margin: 10px 0 0;
+  color: #333;
+}
+
+/* ===== ESTILOS COMUNES A TODOS LOS FORMULARIOS ===== */
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border 0.3s;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #2575fc;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(to right, #2575fc, #6a11cb);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-weight: bold;
+}
+
+button:hover {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+}
+
+/* Botón especial para toggle (no ocupa todo el ancho) */
+.btn-toggle {
+  width: auto;
+  padding: 10px 20px;
+  margin: 15px 0;
+  background: linear-gradient(to right, #3498db, #2980b9);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.error {
+  color: #e74c3c;
+  margin-top: 15px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ===== CONTENEDOR PRINCIPAL PARA VENDEDOR Y JEFE ===== */
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.form-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== TÍTULOS GENERALES ===== */
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* ===== ESTILOS PARA FORMULARIOS DE VENDEDOR ===== */
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.form-row .input-group {
+  flex: 1;
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+  margin-top: 5px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+#montoTotal {
+  margin: 15px 0;
+  padding: 12px;
+  background: #f1f1f1;
+  border-radius: 6px;
+  text-align: center;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
+  color: #333;
+}
+
+/* ===== MODAL DE CONFIRMACIÓN PERSONALIZADO ===== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 25px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.modal-content p {
+  margin: 8px 0;
+  text-align: left;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  width: auto;
+  padding: 10px 20px;
+  margin: 0 5px;
+}
+
+.btn-confirm {
+  background: linear-gradient(to right, #2ecc71, #27ae60);
+}
+
+.btn-cancel {
+  background: linear-gradient(to right, #e74c3c, #c0392b);
+}
+
+/* ===== ESTILOS ESPECÍFICOS PARA JEFE (jefe.html) ===== */
+.titulo-contenedor {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.titulo-panel {
+  color: #333;
+  margin: 0;
+  font-size: 1.8em;
+}
+
+h3, h4 {
+  color: #333;
+  margin-top: 25px;
+}
+
+h3 i, h4 i {
+  margin-right: 8px;
+}
+
+.control-dia {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.control-dia p {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #2575fc;
+}
+
+/* Botones del panel de jefe (más pequeños y en línea) */
+.form-card .control-dia button {
+  width: auto;
+  padding: 10px 20px;
+  margin: 5px;
+}
+
+.reporte-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.reporte-table th,
+.reporte-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.reporte-table th {
+  background-color: #f1f1f1;
+}
+
+.totales {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+.totales p {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+/* ===== ESTILOS RESPONSIVE (móviles) ===== */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Tablas responsivas para jefe */
+  .reporte-table,
+  .reporte-table thead,
+  .reporte-table tbody,
+  .reporte-table th,
+  .reporte-table td,
+  .reporte-table tr {
+    display: block;
+  }
+
+  .reporte-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .reporte-table tr {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    background: white;
+  }
+
+  .reporte-table td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .reporte-table td::before {
+    content: attr(data-label) ": ";
+    position: absolute;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+  }
+}
+
+/* ===== TOOLTIP PARA FACTURA ===== */
+.factura-tooltip-trigger {
+  position: relative;
+  cursor: pointer;
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+.factura-tooltip-trigger:hover {
+  color: #1a5276;
+}
+
+.factura-tooltip {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  padding: 12px;
+  width: 280px;
+  font-size: 14px;
+  z-index: 1001;
+  border-radius: 6px;
+}
+
+.factura-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
+}
+
+.factura-tooltip strong {
+  color: #333;
+  display: block;
+  margin-top: 6px;
+}
+
+.factura-tooltip strong:first-child {
+  margin-top: 0;
+}
+
+/* ===== ESTILOS PARA AUTOCOMPLETADO ===== */
+.autocomplete-wrapper {
+  position: relative;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.autocomplete-item {
+  padding: 12px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.autocomplete-item:hover {
+  background-color: #e9e9e9;
+}
+
+.autocomplete-item strong {
+  color: #2575fc;
+  margin-right: 8px;
+}
+
+.autocomplete-precio {
+  color: #27ae60;
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+/* ===== ESTILOS PARA GESTIÓN DE PRODUCTOS (Jefe) ===== */
+.gestion-productos {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.btn-eliminar {
+  background: linear-gradient(to right, #e74c3c, #c0392b);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.3s;
+  width: auto;
+}
+
+.btn-eliminar:hover {
+  background: linear-gradient(to right, #c0392b, #a93226);
+}
+
+.btn-eliminar i {
+  margin-right: 4px;
+}
+
+/* Ajustes para los botones del modal dentro de la gestión de productos */
+#formProductoContenedor .modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#formProductoContenedor .modal-buttons button {
+  width: auto;
+  padding: 10px 20px;
+}
+
+/* ===== ESTILOS RESPONSIVE PARA NUEVAS FUNCIONALIDADES ===== */
+@media (max-width: 768px) {
+  .autocomplete-items {
+    max-height: 200px;
+  }
+
+  .autocomplete-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .autocomplete-precio {
+    margin-top: 4px;
+  }
+
+  .btn-eliminar {
+    width: 100%;
+    margin-top: 5px;
+  }
+}
+
+/* ===== ESTILOS PARA BOTÓN DE EDITAR ===== */
+.btn-editar {
+  background: linear-gradient(to right, #3498db, #2980b9);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.3s;
+  width: auto;
+  margin-right: 5px;
+}
+
+.btn-editar:hover {
+  background: linear-gradient(to right, #2980b9, #21618c);
+}
+
+.btn-editar i {
+  margin-right: 4px;
+}
+
+/* ===== ESTILOS PARA ESTADO DEL DÍA (Vendedor) ===== */
+.estado-dia-vendedor {
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  border: 2px solid;
+  transition: all 0.3s;
+}
+
+.estado-dia-vendedor i {
+  margin-right: 8px;
+}
+
+.estado-dia-vendedor.dia-abierto {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+}
+
+.estado-dia-vendedor.dia-cerrado {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 10px 5px rgba(220, 53, 69, 0.2);
+  }
+}
+
+/* ===== AJUSTES PARA MODAL DE EDICIÓN ===== */
+#modalEditarProducto .modal-content {
+  max-width: 500px;
+}
+
+#modalEditarProducto .input-group small {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.85em;
+}
+
+/* ===== BOTÓN DE CERRAR SESIÓN ===== */
+.btn-cerrar-sesion {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(to right, #e74c3c, #c0392b);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: bold;
+  transition: all 0.3s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: auto;
+  z-index: 100;
+}
+
+.btn-cerrar-sesion:hover {
+  background: linear-gradient(to right, #c0392b, #a93226);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.btn-cerrar-sesion i {
+  margin-right: 6px;
+}
+
+/* Ajuste para el contenedor form-card para dar espacio al botón */
+.form-card {
+  position: relative;
+  padding-top: 60px; /* Dar espacio para el botón de cerrar sesión */
+}
+
+/* ===== RESPONSIVE PARA BOTONES DE ACCIÓN ===== */
+@media (max-width: 768px) {
+  .btn-editar, .btn-eliminar {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .estado-dia-vendedor {
+    font-size: 1em;
+    padding: 10px 15px;
+  }
+
+  .btn-cerrar-sesion {
+    position: static;
+    width: 100%;
+    margin-bottom: 15px;
+    top: auto;
+    right: auto;
+  }
+
+  .form-card {
+    padding-top: 30px;
+  }
+}
+
+/* ===== ESTILOS PARA ESCÁNER DE CÓDIGOS DE BARRAS ===== */
+
+/* Contenedor del input con botón de escáner */
+.input-with-scanner {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.input-with-scanner input {
+  flex: 1;
+}
+
+/* Botón de escáner */
+.btn-scanner {
+  background: linear-gradient(to right, #9b59b6, #8e44ad);
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: all 0.3s;
+  box-shadow: 0 2px 5px rgba(155, 89, 182, 0.3);
+  width: auto;
+  min-width: 50px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-scanner:hover {
+  background: linear-gradient(to right, #8e44ad, #7d3c98);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(155, 89, 182, 0.4);
+}
+
+.btn-scanner:active {
+  transform: translateY(0);
+}
+
+/* Modal del escáner */
+.modal-escaner {
+  max-width: 600px;
+  width: 95%;
+  padding: 20px;
+}
+
+.escaner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.escaner-header h3 {
+  margin: 0;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-cerrar-escaner {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #666;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: color 0.3s;
+  width: auto;
+}
+
+.btn-cerrar-escaner:hover {
+  color: #e74c3c;
+}
+
+/* Contenedor del lector de códigos */
+#reader {
+  width: 100%;
+  border: 2px dashed #9b59b6;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+  position: relative;
+}
+
+#reader > div {
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#reader video {
+  border-radius: 8px;
+  width: 100% !important;
+  display: block;
+  max-height: 500px;
+  object-fit: cover;
+}
+
+#reader canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Instrucciones del escáner */
+.escaner-instrucciones {
+  margin-top: 20px;
+  text-align: center;
+  color: #666;
+}
+
+.escaner-instrucciones p {
+  margin: 8px 0;
+}
+
+.escaner-instrucciones i {
+  color: #9b59b6;
+  margin-right: 5px;
+}
+
+.escaner-formatos {
+  font-size: 0.85em;
+  color: #999;
+}
+
+/* ===== NOTIFICACIONES ===== */
+.notificacion {
+  position: fixed;
+  top: 20px;
+  right: -400px;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 10000;
+  min-width: 300px;
+  max-width: 400px;
+  font-weight: bold;
+  transition: right 0.3s ease-in-out;
+  border-left: 5px solid;
+}
+
+.notificacion-visible {
+  right: 20px;
+}
+
+.notificacion-success {
+  border-left-color: #27ae60;
+  background: #d4edda;
+  color: #155724;
+}
+
+.notificacion-warning {
+  border-left-color: #f39c12;
+  background: #fff3cd;
+  color: #856404;
+}
+
+.notificacion-info {
+  border-left-color: #3498db;
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+/* ===== MEJORAS PARA MÓVILES ===== */
+@media (max-width: 768px) {
+  /* Botón de escáner más grande en móviles */
+  .btn-scanner {
+    min-width: 60px;
+    padding: 12px 18px;
+  }
+
+  /* Modal del escáner ocupa más espacio */
+  .modal-escaner {
+    width: 98%;
+    max-width: none;
+    margin: 10px;
+  }
+
+  /* Contenedor del escáner más pequeño en móviles */
+  #reader {
+    min-height: 250px;
+  }
+
+  /* Notificaciones más pequeñas en móviles */
+  .notificacion {
+    min-width: 250px;
+    max-width: 90%;
+    font-size: 0.9em;
+  }
+
+  .notificacion-visible {
+    right: 5%;
+  }
+
+  /* Input con escáner en móviles */
+  .input-with-scanner {
+    gap: 5px;
+  }
+
+  /* Instrucciones del escáner */
+  .escaner-instrucciones {
+    font-size: 0.9em;
+  }
+}
+
+/* Estilos específicos para la librería html5-qrcode */
+#reader {
+  border: none !important;
+}
+
+#reader__scan_region {
+  border-radius: 8px;
+}
+
+#reader__dashboard_section {
+  padding: 10px;
+}
+
+#reader__dashboard_section button {
+  background: linear-gradient(to right, #27ae60, #229954) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 10px 20px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  width: auto !important;
+}
+
+#reader__camera_selection {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 0.95em;
+}
+
+/* ===== MEJORAS ADICIONALES DE RESPONSIVE ===== */
+@media (max-width: 480px) {
+  /* Formularios en móviles pequeños */
+  .form-row {
+    gap: 10px;
+  }
+
+  /* Inputs más grandes para móviles */
+  .input-group input,
+  .input-group select {
+    font-size: 16px; /* Evita zoom en iOS */
+    padding: 14px;
+  }
+
+  /* Botones más grandes */
+  button {
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  /* Modal más adaptado */
+  .modal-content {
+    margin: 5% auto;
+    padding: 20px;
+  }
+
+  /* Container ajustado */
+  .container {
+    padding: 0 10px;
+  }
+}

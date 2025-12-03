@@ -748,9 +748,44 @@ async function abrirEscaner() {
     }
 }
 
+// Función para reproducir sonido de escaneo exitoso
+function reproducirSonidoEscaneo() {
+    try {
+        // Crear contexto de audio
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Crear oscilador (genera el tono)
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        // Conectar oscilador -> control de volumen -> salida
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        // Configurar el sonido (beep agradable tipo escáner)
+        oscillator.frequency.value = 1200; // Frecuencia en Hz (tono alto)
+        oscillator.type = 'sine'; // Onda sinusoidal (suave)
+
+        // Configurar volumen con fade out
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime); // Volumen inicial 30%
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15); // Fade out
+
+        // Reproducir por 150ms
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.15);
+
+        console.log("🔊 Sonido de escaneo reproducido");
+    } catch (error) {
+        console.warn("No se pudo reproducir el sonido:", error);
+    }
+}
+
 // Cuando se escanea exitosamente
 async function onScanSuccess(decodedText, decodedResult) {
     console.log(`Código escaneado: ${decodedText}`, decodedResult);
+
+    // Reproducir sonido de éxito
+    reproducirSonidoEscaneo();
 
     // Vibrar si está disponible (feedback táctil)
     if (navigator.vibrate) {

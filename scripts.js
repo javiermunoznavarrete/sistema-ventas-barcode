@@ -266,9 +266,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // ===== CARGAR REPORTES EN PANEL DE JEFE =====
 async function cargarReportes() {
-    const ventas = await obtenerVentas();
+    const resultado = await obtenerVentas();
 
-    if (ventas.length === 0) {
+    // Manejar la nueva estructura de retorno
+    const ventas = resultado.success ? resultado.ventas : [];
+
+    if (!ventas || ventas.length === 0) {
         document.getElementById("resumen-documentos").innerHTML = `<tr><td colspan="2">No hay ventas registradas</td></tr>`;
         document.getElementById("desglose-vendedores").innerHTML = `<tr><td colspan="4">No hay ventas registradas</td></tr>`;
         document.getElementById("totales-generales").innerHTML = "<p>No hay datos disponibles</p>";

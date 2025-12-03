@@ -292,10 +292,12 @@ async function guardarVenta(venta) {
 // Obtener ventas (usa Firebase o localStorage según configuración)
 async function obtenerVentas() {
   if (MODO_ALMACENAMIENTO === "firebase") {
-    return await obtenerVentasFirebase();
+    const ventas = await obtenerVentasFirebase();
+    return { success: true, ventas: ventas };
   } else {
     // Modo localStorage
-    return JSON.parse(localStorage.getItem("ventas")) || [];
+    const ventas = JSON.parse(localStorage.getItem("ventas")) || [];
+    return { success: true, ventas: ventas };
   }
 }
 

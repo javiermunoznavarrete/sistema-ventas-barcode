@@ -290,10 +290,17 @@ h3 i, h4 i {
   margin: 5px;
 }
 
+/* Contenedor con scroll horizontal para tablas */
+#detalleVentasContenedor {
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
 .reporte-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
+  min-width: 1000px; /* Ancho mínimo para evitar compresión excesiva */
 }
 
 .reporte-table th,
@@ -301,10 +308,21 @@ h3 i, h4 i {
   padding: 12px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  white-space: nowrap; /* Evita que el texto se parta en varias líneas */
 }
 
 .reporte-table th {
   background-color: #f1f1f1;
+  font-weight: 600;
+}
+
+/* Alinear números a la derecha */
+.reporte-table td:nth-child(4),  /* Cantidad */
+.reporte-table td:nth-child(5),  /* Precio Unit */
+.reporte-table td:nth-child(6),  /* Subtotal */
+.reporte-table td:nth-child(7),  /* IVA */
+.reporte-table td:nth-child(8) { /* Total */
+  text-align: right;
 }
 
 .totales {

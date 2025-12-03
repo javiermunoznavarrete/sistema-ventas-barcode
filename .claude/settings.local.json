@@ -3,7 +3,16 @@
     "allow": [
       "Bash(dir /b)",
       "Bash(git init)",
-      "Bash(git add .)"
+      "Bash(git add .)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Sistema de Ventas con Escáner de Códigos de Barras\n\n- Sistema de gestión de ventas completo en español\n- Login con roles (vendedor/jefe)\n- CRUD de productos/SKUs\n- Escáner de códigos de barras móvil y desktop\n- Control de día (abrir/cerrar ventas)\n- Cálculo automático de IVA\n- Firebase/localStorage configurable\n- Completamente responsive\n\n🤖 Generated with Claude Code\nEOF\n)\")",
+      "Bash(gh --version)",
+      "Bash(gh repo create sistema-ventas-barcode --public --source=. --remote=origin --push --description \"Sistema de Ventas con Escáner de Códigos de Barras - HTML/CSS/JS + Firebase\")",
+      "Bash(gh api repos/javiermunoznavarrete/sistema-ventas-barcode/pages -X POST --silent -f source[branch]=master -f source[path]=/)",
+      "Bash(git add scripts.js)",
+      "Bash(git commit -m \"Agregar sonido de beep al escanear código de barras\n\n- Sonido tipo escáner de supermercado (1200Hz)\n- Duración: 150ms con fade out\n- Volumen moderado (30%)\n- Usa Web Audio API (sin archivos externos)\n- Feedback combinado: sonido + vibración\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(git push)",
+      "Bash(git add -A)",
+      "Bash(git commit -m \"Mejorar estética de alertas con modales personalizados\n\n- Reemplazar alert() y confirm() nativos por modales personalizados\n- Diseño moderno con animaciones suaves (slideInDown, fadeIn/Out)\n- Iconos de FontAwesome según tipo (success, error, warning, info)\n- Botones estilizados con gradientes y efectos hover\n- Responsive para móviles y tablets\n- Backdrop blur para mejor énfasis\n- Promesas async/await para flujo natural del código\n\nTipos de alertas:\n- Success: ícono verde check-circle\n- Error: ícono rojo times-circle\n- Warning: ícono amarillo exclamation-triangle\n- Info: ícono azul info-circle\n\nConfirmaciones con dos botones:\n- Cancelar (secundario)\n- Aceptar (primario con gradiente)\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
     ],
     "deny": [],
     "ask": []

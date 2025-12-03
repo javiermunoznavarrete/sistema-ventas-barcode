@@ -111,6 +111,41 @@
     </div>
   </div>
 
+  <!-- Modal de Alerta Personalizada -->
+  <div id="modalAlerta" class="modal-custom" style="display: none;">
+    <div class="modal-custom-overlay"></div>
+    <div class="modal-custom-content modal-alerta">
+      <div class="modal-custom-icon" id="alertaIcono">
+        <i class="fas fa-info-circle"></i>
+      </div>
+      <div class="modal-custom-body">
+        <h3 id="alertaTitulo">Información</h3>
+        <p id="alertaMensaje"></p>
+      </div>
+      <div class="modal-custom-buttons">
+        <button type="button" class="btn-custom btn-custom-primary" onclick="cerrarAlerta()">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmación Personalizada -->
+  <div id="modalConfirmacion" class="modal-custom" style="display: none;">
+    <div class="modal-custom-overlay"></div>
+    <div class="modal-custom-content modal-confirmacion">
+      <div class="modal-custom-icon modal-custom-icon-warning">
+        <i class="fas fa-question-circle"></i>
+      </div>
+      <div class="modal-custom-body">
+        <h3 id="confirmacionTitulo">Confirmar acción</h3>
+        <p id="confirmacionMensaje"></p>
+      </div>
+      <div class="modal-custom-buttons">
+        <button type="button" class="btn-custom btn-custom-secondary" onclick="responderConfirmacion(false)">Cancelar</button>
+        <button type="button" class="btn-custom btn-custom-primary" onclick="responderConfirmacion(true)">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Librería de escaneo de códigos de barras -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 

@@ -80,13 +80,13 @@ document.getElementById("ventaForm")?.addEventListener("submit", function (e) {
 
     // Validar campos obligatorios
     if (!venta.codigo || !venta.nombre || isNaN(venta.cantidad) || isNaN(venta.precio) || venta.cantidad <= 0 || venta.precio <= 0) {
-        alert("Por favor completa todos los campos correctamente.");
+        mostrarAlerta("Por favor completa todos los campos correctamente.", 'warning');
         return;
     }
 
     if (venta.tipo === "factura") {
         if (!venta.rut || !venta.razon || !venta.giro || !venta.direccion) {
-            alert("Completa todos los datos del cliente para la factura.");
+            mostrarAlerta("Completa todos los datos del cliente para la factura.", 'warning');
             return;
         }
     }
@@ -146,7 +146,7 @@ async function confirmarVenta() {
 
     if (estadoDia === "CERRADO") {
         cerrarModal();
-        alert("⚠️ No se pueden registrar ventas. El día está CERRADO.\n\nPor favor contacta al jefe de ventas para que abra el día.");
+        mostrarAlerta("No se pueden registrar ventas. El día está CERRADO.\n\nPor favor contacta al jefe de ventas para que abra el día.", 'warning');
         return;
     }
 
@@ -156,13 +156,13 @@ async function confirmarVenta() {
     const resultado = await guardarVenta(venta);
 
     if (resultado.success) {
-        alert("✅ Venta guardada exitosamente");
+        await mostrarAlerta("Venta guardada exitosamente", 'success');
         document.getElementById("ventaForm").reset();
         document.getElementById("datosCliente").style.display = "none";
         document.getElementById("montoTotal").innerHTML = "";
         cerrarModal();
     } else {
-        alert("❌ Error al guardar la venta: " + (resultado.error || "Error desconocido"));
+        mostrarAlerta("Error al guardar la venta: " + (resultado.error || "Error desconocido"), 'error');
     }
 }
 
@@ -220,14 +220,19 @@ document.addEventListener("DOMContentLoaded", function () {
         cargarEstadoDia();
 
         cerrarDiaBtn.addEventListener("click", async function () {
-            if (confirm("¿Estás seguro de cerrar el día? Los vendedores no podrán registrar ventas hasta que lo abras nuevamente.")) {
+            const confirmar = await mostrarConfirmacion(
+                "Los vendedores no podrán registrar ventas hasta que lo abras nuevamente.",
+                "¿Cerrar el día?"
+            );
+
+            if (confirmar) {
                 const resultado = await guardarEstadoDia("CERRADO");
 
                 if (resultado.success) {
                     actualizarUIEstadoDia("CERRADO");
-                    alert("✅ Día cerrado exitosamente");
+                    await mostrarAlerta("Día cerrado exitosamente", 'success');
                 } else {
-                    alert("❌ Error al cerrar el día: " + (resultado.error || "Error desconocido"));
+                    mostrarAlerta("Error al cerrar el día: " + (resultado.error || "Error desconocido"), 'error');
                 }
             }
         });
@@ -237,9 +242,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (resultado.success) {
                 actualizarUIEstadoDia("ABIERTO");
-                alert("✅ Día abierto exitosamente");
+                await mostrarAlerta("Día abierto exitosamente", 'success');
             } else {
-                alert("❌ Error al abrir el día: " + (resultado.error || "Error desconocido"));
+                mostrarAlerta("Error al abrir el día: " + (resultado.error || "Error desconocido"), 'error');
             }
         });
     }
@@ -535,18 +540,18 @@ document.getElementById("productoForm")?.addEventListener("submit", async functi
 
     // Validar
     if (!producto.codigo || !producto.nombre || isNaN(producto.precio) || producto.precio <= 0) {
-        alert("Por favor completa todos los campos obligatorios correctamente.");
+        mostrarAlerta("Por favor completa todos los campos obligatorios correctamente.", 'warning');
         return;
     }
 
     const resultado = await guardarProducto(producto);
 
     if (resultado.success) {
-        alert("✅ Producto guardado exitosamente");
+        await mostrarAlerta("Producto guardado exitosamente", 'success');
         cancelarFormProducto();
         cargarProductos(); // Recargar la lista
     } else {
-        alert("❌ Error al guardar el producto: " + (resultado.error || "Error desconocido"));
+        mostrarAlerta("Error al guardar el producto: " + (resultado.error || "Error desconocido"), 'error');
     }
 });
 
@@ -587,14 +592,19 @@ async function cargarProductos() {
 
 // Eliminar producto con confirmación
 async function eliminarProductoConfirmar(codigo) {
-    if (confirm(`¿Estás seguro de eliminar el producto ${codigo}?`)) {
+    const confirmar = await mostrarConfirmacion(
+        `El producto con código ${codigo} será eliminado permanentemente.`,
+        "¿Eliminar producto?"
+    );
+
+    if (confirmar) {
         const resultado = await eliminarProducto(codigo);
 
         if (resultado.success) {
-            alert("✅ Producto eliminado exitosamente");
+            await mostrarAlerta("Producto eliminado exitosamente", 'success');
             cargarProductos();
         } else {
-            alert("❌ Error al eliminar el producto: " + (resultado.error || "Error desconocido"));
+            mostrarAlerta("Error al eliminar el producto: " + (resultado.error || "Error desconocido"), 'error');
         }
     }
 }
@@ -629,21 +639,21 @@ document.getElementById("formEditarProducto")?.addEventListener("submit", async 
 
     // Validar
     if (!productoEditado.nombre || isNaN(productoEditado.precio) || productoEditado.precio <= 0) {
-        alert("Por favor completa todos los campos correctamente.");
+        mostrarAlerta("Por favor completa todos los campos correctamente.", 'warning');
         return;
     }
 
     const resultado = await guardarProducto(productoEditado);
 
     if (resultado.success) {
-        alert("✅ Producto actualizado exitosamente");
+        await mostrarAlerta("Producto actualizado exitosamente", 'success');
         cerrarModalEdicion();
         cargarProductos();
 
         // Actualizar cache de productos para autocompletado
         productosCache = await obtenerProductos();
     } else {
-        alert("❌ Error al actualizar el producto: " + (resultado.error || "Error desconocido"));
+        mostrarAlerta("Error al actualizar el producto: " + (resultado.error || "Error desconocido"), 'error');
     }
 });
 
@@ -656,8 +666,13 @@ if (document.getElementById("resumen-documentos")) {
 }
 
 // ===== CERRAR SESIÓN =====
-function cerrarSesion() {
-    if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
+async function cerrarSesion() {
+    const confirmar = await mostrarConfirmacion(
+        "Se cerrará la sesión actual y volverás al inicio de sesión.",
+        "¿Cerrar sesión?"
+    );
+
+    if (confirmar) {
         // Redirigir al login
         window.location.href = "index.html";
     }
@@ -887,4 +902,145 @@ function mostrarNotificacion(mensaje, tipo = "info") {
             notif.remove();
         }, 300);
     }, 3000);
+}
+
+// ============================================
+// MODALES PERSONALIZADOS (Reemplazan alert y confirm)
+// ============================================
+
+/**
+ * Mostrar alerta personalizada (reemplaza alert())
+ * @param {string} mensaje - El mensaje a mostrar
+ * @param {string} tipo - Tipo de alerta: 'success', 'error', 'warning', 'info'
+ * @returns {Promise} - Resuelve cuando se cierra la alerta
+ */
+function mostrarAlerta(mensaje, tipo = 'info') {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('modalAlerta');
+        const icono = document.getElementById('alertaIcono');
+        const titulo = document.getElementById('alertaTitulo');
+        const mensajeElement = document.getElementById('alertaMensaje');
+
+        if (!modal) {
+            console.error("No se encontró el modal de alerta");
+            alert(mensaje); // Fallback a alert nativo
+            resolve();
+            return;
+        }
+
+        // Configurar icono y título según el tipo
+        let iconoHTML = '';
+        let tituloTexto = '';
+
+        switch (tipo) {
+            case 'success':
+                iconoHTML = '<i class="fas fa-check-circle"></i>';
+                tituloTexto = 'Éxito';
+                break;
+            case 'error':
+                iconoHTML = '<i class="fas fa-times-circle"></i>';
+                tituloTexto = 'Error';
+                break;
+            case 'warning':
+                iconoHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                tituloTexto = 'Advertencia';
+                break;
+            case 'info':
+            default:
+                iconoHTML = '<i class="fas fa-info-circle"></i>';
+                tituloTexto = 'Información';
+                break;
+        }
+
+        // Actualizar contenido
+        icono.innerHTML = iconoHTML;
+        titulo.textContent = tituloTexto;
+        mensajeElement.textContent = mensaje;
+
+        // Mostrar modal
+        modal.style.display = 'block';
+
+        // Guardar resolver para usarlo al cerrar
+        modal.dataset.resolve = 'pending';
+        window._alertaResolve = resolve;
+    });
+}
+
+/**
+ * Cerrar alerta personalizada
+ */
+function cerrarAlerta() {
+    const modal = document.getElementById('modalAlerta');
+
+    if (!modal) return;
+
+    // Agregar clase de salida para animación
+    modal.classList.add('modal-saliendo');
+
+    // Esperar a que termine la animación
+    setTimeout(() => {
+        modal.style.display = 'none';
+        modal.classList.remove('modal-saliendo');
+
+        // Resolver la promesa
+        if (window._alertaResolve) {
+            window._alertaResolve();
+            window._alertaResolve = null;
+        }
+    }, 300);
+}
+
+/**
+ * Mostrar confirmación personalizada (reemplaza confirm())
+ * @param {string} mensaje - El mensaje a mostrar
+ * @param {string} titulo - Título personalizado (opcional)
+ * @returns {Promise<boolean>} - true si aceptó, false si canceló
+ */
+function mostrarConfirmacion(mensaje, titulo = '¿Estás seguro?') {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('modalConfirmacion');
+        const tituloElement = document.getElementById('confirmacionTitulo');
+        const mensajeElement = document.getElementById('confirmacionMensaje');
+
+        if (!modal) {
+            console.error("No se encontró el modal de confirmación");
+            resolve(confirm(mensaje)); // Fallback a confirm nativo
+            return;
+        }
+
+        // Actualizar contenido
+        tituloElement.textContent = titulo;
+        mensajeElement.textContent = mensaje;
+
+        // Mostrar modal
+        modal.style.display = 'block';
+
+        // Guardar resolver para usarlo al responder
+        window._confirmacionResolve = resolve;
+    });
+}
+
+/**
+ * Responder a la confirmación
+ * @param {boolean} respuesta - true para aceptar, false para cancelar
+ */
+function responderConfirmacion(respuesta) {
+    const modal = document.getElementById('modalConfirmacion');
+
+    if (!modal) return;
+
+    // Agregar clase de salida para animación
+    modal.classList.add('modal-saliendo');
+
+    // Esperar a que termine la animación
+    setTimeout(() => {
+        modal.style.display = 'none';
+        modal.classList.remove('modal-saliendo');
+
+        // Resolver la promesa con la respuesta
+        if (window._confirmacionResolve) {
+            window._confirmacionResolve(respuesta);
+            window._confirmacionResolve = null;
+        }
+    }, 300);
 }

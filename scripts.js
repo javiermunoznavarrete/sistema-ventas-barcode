@@ -916,15 +916,43 @@ function mostrarNotificacion(mensaje, tipo = "info") {
  */
 function mostrarAlerta(mensaje, tipo = 'info') {
     return new Promise((resolve) => {
+        console.log('🔔 Mostrando alerta personalizada:', mensaje, tipo);
+
         const modal = document.getElementById('modalAlerta');
         const icono = document.getElementById('alertaIcono');
         const titulo = document.getElementById('alertaTitulo');
         const mensajeElement = document.getElementById('alertaMensaje');
 
-        if (!modal) {
-            console.error("No se encontró el modal de alerta");
-            alert(mensaje); // Fallback a alert nativo
-            resolve();
+        if (!modal || !icono || !titulo || !mensajeElement) {
+            console.error("❌ No se encontraron los elementos del modal de alerta personalizado");
+            console.error("Modal:", modal, "Icono:", icono, "Titulo:", titulo, "Mensaje:", mensajeElement);
+            // Fallback: crear alerta temporal con estilos en lugar de alert() nativo
+            const alertaFallback = document.createElement('div');
+            alertaFallback.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 30px;
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                z-index: 99999;
+                max-width: 90%;
+                text-align: center;
+            `;
+            alertaFallback.innerHTML = `
+                <h3 style="margin: 0 0 15px 0; color: #2c3e50;">${tipo === 'success' ? 'Éxito' : tipo === 'error' ? 'Error' : 'Información'}</h3>
+                <p style="margin: 0 0 20px 0; color: #555;">${mensaje}</p>
+                <button onclick="this.parentElement.remove()" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer;">Aceptar</button>
+            `;
+            document.body.appendChild(alertaFallback);
+            setTimeout(() => {
+                if (alertaFallback.parentElement) {
+                    alertaFallback.remove();
+                    resolve();
+                }
+            }, 5000);
             return;
         }
 
@@ -998,13 +1026,51 @@ function cerrarAlerta() {
  */
 function mostrarConfirmacion(mensaje, titulo = '¿Estás seguro?') {
     return new Promise((resolve) => {
+        console.log('❓ Mostrando confirmación personalizada:', mensaje);
+
         const modal = document.getElementById('modalConfirmacion');
         const tituloElement = document.getElementById('confirmacionTitulo');
         const mensajeElement = document.getElementById('confirmacionMensaje');
 
-        if (!modal) {
-            console.error("No se encontró el modal de confirmación");
-            resolve(confirm(mensaje)); // Fallback a confirm nativo
+        if (!modal || !tituloElement || !mensajeElement) {
+            console.error("❌ No se encontró el modal de confirmación personalizado");
+            // Fallback: crear confirmación temporal con estilos en lugar de confirm() nativo
+            const confirmarFallback = document.createElement('div');
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.6);
+                z-index: 99998;
+            `;
+            confirmarFallback.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 30px;
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                z-index: 99999;
+                max-width: 90%;
+                text-align: center;
+            `;
+            confirmarFallback.innerHTML = `
+                <h3 style="margin: 0 0 15px 0; color: #2c3e50;">${titulo}</h3>
+                <p style="margin: 0 0 20px 0; color: #555;">${mensaje}</p>
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                    <button onclick="window._tempConfirmResolve(false); this.parentElement.parentElement.remove(); document.querySelector('[data-temp-overlay]').remove();" style="padding: 12px 24px; background: #ecf0f1; color: #2c3e50; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Cancelar</button>
+                    <button onclick="window._tempConfirmResolve(true); this.parentElement.parentElement.remove(); document.querySelector('[data-temp-overlay]').remove();" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Aceptar</button>
+                </div>
+            `;
+            overlay.setAttribute('data-temp-overlay', 'true');
+            document.body.appendChild(overlay);
+            document.body.appendChild(confirmarFallback);
+            window._tempConfirmResolve = resolve;
             return;
         }
 

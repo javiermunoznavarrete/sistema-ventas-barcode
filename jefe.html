@@ -118,6 +118,11 @@
         <!-- ✅ BOTÓN MOVIDO AQUÍ: justo después de "Totales Generales" -->
         <button id="toggleDetalle" class="btn-toggle">Mostrar Detalle de Ventas</button>
 
+        <!-- Botón para exportar a Excel -->
+        <button id="btnExportarExcel" class="btn-toggle btn-exportar">
+          <i class="fas fa-file-excel"></i> Exportar Ventas a Excel
+        </button>
+
         <!-- ✅ CONTENEDOR DEL DETALLE: justo después del botón -->
         <div id="detalleVentasContenedor" style="display: none;">
           <h4>Detalle de Ventas</h4>
@@ -218,6 +223,9 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <!-- SheetJS para exportar a Excel -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 
   <!-- Archivos del sistema -->
   <script src="config.js"></script>

@@ -109,6 +109,24 @@ button:hover {
   cursor: pointer;
 }
 
+/* Botón de exportar a Excel */
+.btn-exportar {
+  background: linear-gradient(to right, #27ae60, #229954);
+  margin-left: 10px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.btn-exportar:hover {
+  background: linear-gradient(to right, #229954, #1e8449);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+}
+
+.btn-exportar i {
+  margin-right: 8px;
+}
+
 .error {
   color: #e74c3c;
   margin-top: 15px;

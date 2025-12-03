@@ -1110,3 +1110,206 @@ function responderConfirmacion(respuesta) {
         }
     }, 300);
 }
+
+// ============================================
+// EXPORTAR VENTAS A EXCEL (Jefe)
+// ============================================
+
+/**
+ * Exportar todas las ventas a un archivo Excel
+ */
+async function exportarVentasExcel() {
+    try {
+        console.log("📊 Iniciando exportación a Excel...");
+
+        // Verificar que la librería XLSX esté disponible
+        if (typeof XLSX === 'undefined') {
+            mostrarAlerta("Error: Librería de Excel no cargada. Recarga la página.", 'error');
+            return;
+        }
+
+        // Obtener todas las ventas
+        const resultado = await obtenerVentas();
+
+        if (!resultado.success || !resultado.ventas || resultado.ventas.length === 0) {
+            mostrarAlerta("No hay ventas para exportar.", 'warning');
+            return;
+        }
+
+        const ventas = resultado.ventas;
+        console.log(`📦 ${ventas.length} ventas encontradas`);
+
+        // Crear libro de Excel
+        const workbook = XLSX.utils.book_new();
+
+        // ===== HOJA 1: DETALLE DE VENTAS =====
+        const datosDetalle = ventas.map(venta => ({
+            'Fecha': venta.fecha || '',
+            'Código': venta.codigo || '',
+            'Nombre Producto': venta.nombre || '',
+            'Cantidad': venta.cantidad || 0,
+            'Precio Unitario': venta.precio || 0,
+            'Subtotal': venta.subtotal || 0,
+            'IVA (19%)': venta.iva || 0,
+            'Total': venta.total || 0,
+            'Tipo Documento': venta.tipo || '',
+            'Vendedor': venta.vendedor || '',
+            'RUT Cliente': venta.rut || '',
+            'Razón Social': venta.razon || '',
+            'Giro': venta.giro || '',
+            'Dirección': venta.direccion || ''
+        }));
+
+        const hojaDetalle = XLSX.utils.json_to_sheet(datosDetalle);
+
+        // Ajustar ancho de columnas
+        hojaDetalle['!cols'] = [
+            { wch: 12 },  // Fecha
+            { wch: 15 },  // Código
+            { wch: 30 },  // Nombre
+            { wch: 10 },  // Cantidad
+            { wch: 15 },  // Precio Unit
+            { wch: 15 },  // Subtotal
+            { wch: 15 },  // IVA
+            { wch: 15 },  // Total
+            { wch: 10 },  // Tipo
+            { wch: 15 },  // Vendedor
+            { wch: 15 },  // RUT
+            { wch: 25 },  // Razón Social
+            { wch: 20 },  // Giro
+            { wch: 30 }   // Dirección
+        ];
+
+        XLSX.utils.book_append_sheet(workbook, hojaDetalle, "Detalle de Ventas");
+
+        // ===== HOJA 2: RESUMEN POR TIPO DE DOCUMENTO =====
+        const resumenTipo = {};
+        ventas.forEach(venta => {
+            const tipo = venta.tipo || 'Sin especificar';
+            if (!resumenTipo[tipo]) {
+                resumenTipo[tipo] = {
+                    cantidad: 0,
+                    total: 0
+                };
+            }
+            resumenTipo[tipo].cantidad++;
+            resumenTipo[tipo].total += venta.total || 0;
+        });
+
+        const datosResumenTipo = Object.keys(resumenTipo).map(tipo => ({
+            'Tipo de Documento': tipo.toUpperCase(),
+            'Cantidad de Ventas': resumenTipo[tipo].cantidad,
+            'Total': resumenTipo[tipo].total
+        }));
+
+        const hojaResumenTipo = XLSX.utils.json_to_sheet(datosResumenTipo);
+        hojaResumenTipo['!cols'] = [
+            { wch: 20 },  // Tipo
+            { wch: 18 },  // Cantidad
+            { wch: 15 }   // Total
+        ];
+
+        XLSX.utils.book_append_sheet(workbook, hojaResumenTipo, "Resumen por Tipo");
+
+        // ===== HOJA 3: RESUMEN POR VENDEDOR =====
+        const resumenVendedor = {};
+        ventas.forEach(venta => {
+            const vendedor = venta.vendedor || 'Sin especificar';
+            if (!resumenVendedor[vendedor]) {
+                resumenVendedor[vendedor] = {
+                    cantidad: 0,
+                    boletas: 0,
+                    facturas: 0,
+                    total: 0
+                };
+            }
+            resumenVendedor[vendedor].cantidad++;
+            if (venta.tipo === 'boleta') {
+                resumenVendedor[vendedor].boletas++;
+            } else if (venta.tipo === 'factura') {
+                resumenVendedor[vendedor].facturas++;
+            }
+            resumenVendedor[vendedor].total += venta.total || 0;
+        });
+
+        const datosResumenVendedor = Object.keys(resumenVendedor).map(vendedor => ({
+            'Vendedor': vendedor,
+            'Total Ventas': resumenVendedor[vendedor].cantidad,
+            'Boletas': resumenVendedor[vendedor].boletas,
+            'Facturas': resumenVendedor[vendedor].facturas,
+            'Monto Total': resumenVendedor[vendedor].total
+        }));
+
+        const hojaResumenVendedor = XLSX.utils.json_to_sheet(datosResumenVendedor);
+        hojaResumenVendedor['!cols'] = [
+            { wch: 15 },  // Vendedor
+            { wch: 15 },  // Total Ventas
+            { wch: 12 },  // Boletas
+            { wch: 12 },  // Facturas
+            { wch: 15 }   // Monto Total
+        ];
+
+        XLSX.utils.book_append_sheet(workbook, hojaResumenVendedor, "Resumen por Vendedor");
+
+        // ===== HOJA 4: PRODUCTOS MÁS VENDIDOS =====
+        const productosMasVendidos = {};
+        ventas.forEach(venta => {
+            const producto = `${venta.codigo} - ${venta.nombre}`;
+            if (!productosMasVendidos[producto]) {
+                productosMasVendidos[producto] = {
+                    codigo: venta.codigo,
+                    nombre: venta.nombre,
+                    cantidadTotal: 0,
+                    ventasRealizadas: 0,
+                    montoTotal: 0
+                };
+            }
+            productosMasVendidos[producto].cantidadTotal += venta.cantidad || 0;
+            productosMasVendidos[producto].ventasRealizadas++;
+            productosMasVendidos[producto].montoTotal += venta.total || 0;
+        });
+
+        const datosProductos = Object.values(productosMasVendidos)
+            .sort((a, b) => b.cantidadTotal - a.cantidadTotal)
+            .map(prod => ({
+                'Código': prod.codigo,
+                'Nombre': prod.nombre,
+                'Unidades Vendidas': prod.cantidadTotal,
+                'Cantidad de Ventas': prod.ventasRealizadas,
+                'Monto Total': prod.montoTotal
+            }));
+
+        const hojaProductos = XLSX.utils.json_to_sheet(datosProductos);
+        hojaProductos['!cols'] = [
+            { wch: 15 },  // Código
+            { wch: 30 },  // Nombre
+            { wch: 18 },  // Unidades
+            { wch: 18 },  // Ventas
+            { wch: 15 }   // Monto
+        ];
+
+        XLSX.utils.book_append_sheet(workbook, hojaProductos, "Productos Más Vendidos");
+
+        // ===== GENERAR Y DESCARGAR ARCHIVO =====
+        const fechaActual = new Date().toISOString().split('T')[0];
+        const nombreArchivo = `Ventas_${fechaActual}.xlsx`;
+
+        XLSX.writeFile(workbook, nombreArchivo);
+
+        console.log("✅ Excel exportado exitosamente");
+        await mostrarAlerta(`Excel exportado exitosamente:\n${nombreArchivo}\n\n${ventas.length} ventas exportadas en 4 hojas`, 'success');
+
+    } catch (error) {
+        console.error("❌ Error al exportar a Excel:", error);
+        mostrarAlerta("Error al exportar a Excel: " + error.message, 'error');
+    }
+}
+
+// Event listener para el botón de exportar (solo en página de jefe)
+document.addEventListener('DOMContentLoaded', () => {
+    const btnExportarExcel = document.getElementById('btnExportarExcel');
+    if (btnExportarExcel) {
+        btnExportarExcel.addEventListener('click', exportarVentasExcel);
+        console.log("✅ Botón de exportar Excel configurado");
+    }
+});

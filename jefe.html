@@ -62,53 +62,56 @@
             </div>
           </form>
         </div>
-
-        <h4>Productos Registrados</h4>
-        <table class="reporte-table">
-          <thead>
-            <tr>
-              <th>Código SKU</th>
-              <th>Nombre</th>
-              <th>Precio</th>
-              <th>Descripción</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="lista-productos">
-            <tr><td colspan="5">Cargando...</td></tr>
-          </tbody>
-        </table>
+        <div id="OverflowTable">
+          <h4>Productos Registrados</h4>
+          <table class="reporte-table">
+            <thead>
+              <tr>
+                <th>Código SKU</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="lista-productos">
+              <tr><td colspan="5">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="reportes">
         <h3><i class="fas fa-chart-bar"></i> Reportes Diarios</h3>
-        
-        <table class="reporte-table">
-          <thead>
-            <tr>
-              <th>Tipo de Documento</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody id="resumen-documentos">
-            <tr><td colspan="2">Cargando...</td></tr>
-          </tbody>
-        </table>
-
+        <div id="OverflowTable">
+          <table class="reporte-table">
+            <thead>
+              <tr>
+                <th>Tipo de Documento</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="resumen-documentos">
+              <tr><td colspan="2">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="OverflowTable">
         <h4>Desglose por Vendedor</h4>
-        <table class="reporte-table">
-          <thead>
-            <tr>
-              <th>Vendedor</th>
-              <th>Total Ventas</th>
-              <th>Boletas</th>
-              <th>Facturas</th>
-            </tr>
-          </thead>
-          <tbody id="desglose-vendedores">
-            <tr><td colspan="4">Cargando...</td></tr>
-          </tbody>
-        </table>
+          <table class="reporte-table">
+            <thead>
+              <tr>
+                <th>Vendedor</th>
+                <th>Total Ventas</th>
+                <th>Boletas</th>
+                <th>Facturas</th>
+              </tr>
+            </thead>
+            <tbody id="desglose-vendedores">
+              <tr><td colspan="4">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
 
         <h4>Totales Generales</h4>
         <div class="totales" id="totales-generales">
@@ -124,7 +127,7 @@
         </button>
 
         <!-- ✅ CONTENEDOR DEL DETALLE: justo después del botón -->
-        <div id="detalleVentasContenedor" style="display: none;">
+        <div id="OverflowTable" style="display: none;">
           <h4>Detalle de Ventas</h4>
           <table class="reporte-table">
             <thead>

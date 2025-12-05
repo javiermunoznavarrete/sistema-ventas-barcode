@@ -291,7 +291,8 @@ h3 i, h4 i {
 }
 
 /* Contenedor con scroll horizontal para tablas */
-#detalleVentasContenedor {
+.table-overflow,
+#OverflowTable {
   overflow-x: auto;
   margin-top: 15px;
 }
